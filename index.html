@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>chat4now</title>
+</head>
+<body>
+  <div id="app">
+    <div class="start" v-if="clicks === 0">
+      <button @click.prevent.stop="startCounter">시작</button>
+    </div>
+    <div class="chat" v-else>
+      <h2 class="question">{{ questions[question] }}</h2>
+      <p class="time">{{ seconds }}</p>
+    </div>
+  </div>
+  <script src="https://unpkg.com/vue"></script>
+  <script>
+    var app = new Vue({
+      el: '#app',
+      data: {
+        clicks: 0,
+        seconds: 0,
+        counter: null,
+        question: 0,
+        questions: [
+          'Vue.js를 사용하게 된 계기',
+          'Vue.js를 사용하며 가장 힘들었던 점',
+          'Vus.js를 사용하며 가장 편했던 점',
+          'Vue.js로 만들어 보고 싶은 프로젝트',
+          'Vuetiful Korea 세번째 밋업에서 가장 인상깊었던 세션',
+          'Vuetiful Korea 밋업을 개선하는 방법',
+          '자기소개',
+          '모두 오른쪽에 있는 사람 안마해주기',
+          '왼쪽에 앉은 사람 웃기기',
+          '건너편에 앉은 사람과 자리 바꾸기',
+          'Vuetiful Korea 스태프 및 발표자에게 감사인사',
+          '소속단체소개',
+          '아무말대잔치'
+        ]
+      },
+      computed: {
+      },
+      methods: {
+        startCounter () {
+          let vm = this
+          if (vm.clicks > 0) {
+            return
+          } else {
+            vm.question = Math.floor(Math.random() * vm.questions.length)
+            console.log(vm.question)
+            vm.seconds = Math.floor((Math.random() * 49) + 12)
+            vm.counter = setInterval(intervalFn, 1000)
+          }
+
+          function intervalFn () {
+            switch (true) {
+              case vm.seconds > 0:
+                vm.seconds--
+                break
+              case vm.seconds === 0:
+                clearInterval(vm.counter)
+                vm.clicks = 0
+                break
+              default:
+                console.log('Something went wrong...')
+            }
+          }
+          vm.clicks++
+        }
+      }
+    })
+  </script>
+</body>
+</html>
