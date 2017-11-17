@@ -5,15 +5,182 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>chat4now</title>
+  <style>
+    html, body, div, span, applet, object, iframe,
+    h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+    a, abbr, acronym, address, big, cite, code,
+    del, dfn, em, img, ins, kbd, q, s, samp,
+    small, strike, strong, sub, sup, tt, var,
+    b, u, i, center,
+    dl, dt, dd, ol, ul, li,
+    fieldset, form, label, legend,
+    table, caption, tbody, tfoot, thead, tr, th, td,
+    article, aside, canvas, details, embed,
+    figure, figcaption, footer, header, hgroup,
+    menu, nav, output, ruby, section, summary,
+    time, mark, audio, video {
+      margin: 0;
+      padding: 0;
+      border: 0;
+      font-size: 100%;
+      font: inherit;
+      vertical-align: baseline;
+    }
+    /* HTML5 display-role reset for older browsers */
+    article, aside, details, figcaption, figure,
+    footer, header, hgroup, menu, nav, section {
+      display: block;
+    }
+    body {
+      line-height: 1;
+    }
+    ol, ul {
+      list-style: none;
+    }
+    blockquote, q {
+      quotes: none;
+    }
+    blockquote:before, blockquote:after,
+    q:before, q:after {
+      content: '';
+      content: none;
+    }
+    table {
+      border-collapse: collapse;
+      border-spacing: 0;
+    }
+
+    input,
+    label,
+    select,
+    button,
+    textarea {
+      margin:0;
+      border:0;
+      padding:0;
+      display:inline-block;
+      vertical-align:middle;
+      white-space:normal;
+      background:none;
+      line-height:1;
+
+      /* Browsers have different default form fonts */
+      font-size:13px;
+      font-family:Arial;
+    }
+
+    /* Remove the stupid outer glow in Webkit */
+    input:focus {
+      outline:0;
+    }
+
+    /* Box Sizing Reset
+    -----------------------------------------------*/
+
+    /* All of our custom controls should be what we expect them to be */
+    input,
+    textarea {
+      -webkit-box-sizing:content-box;
+      -moz-box-sizing:content-box;
+      box-sizing:content-box;
+    }
+
+    /* These elements are usually rendered a certain way by the browser */
+    button,
+    input[type=reset],
+    input[type=button],
+    input[type=submit],
+    input[type=checkbox],
+    input[type=radio],
+    select {
+      -webkit-box-sizing:border-box;
+      -moz-box-sizing:border-box;
+      box-sizing:border-box;
+    }
+
+    /* Buttons
+    -----------------------------------------------*/
+
+    button,
+    input[type="reset"],
+    input[type="button"],
+    input[type="submit"] {
+      /* Fix IE7 display bug */
+      overflow:visible;
+      width:auto;
+    }
+
+    /* IE8 and FF freak out if this rule is within another selector */
+    ::-webkit-file-upload-button {
+      padding:0;
+      border:0;
+      background:none;
+    }
+
+    #app {
+      font-family: 'Nanum Square', Helvetica, Arial, sans-serif;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    [v-cloak] {
+      display: none;
+    }
+
+    .contents-wrap {
+
+    }
+
+    .contents {
+      height: 100%;
+      width: 100%;
+      display: flex;
+      position: fixed;
+      align-items: center;
+      justify-content: center;
+    }
+    button {
+      -webkit-border-radius: 2;
+      -moz-border-radius: 2;
+      border-radius: 2px;
+      color: #fff;
+      font-size: 16px;
+      font-weight: bold;
+      background: #3ab982;
+      padding: 10px 20px;
+      text-decoration: none;
+      cursor: pointer;
+    }
+    button:hover {
+      background: #35a675;
+      text-decoration: none;
+    }
+    .question {
+      font-size: 24px;
+      font-weight: bold;
+      color: #3ab982;
+    }
+
+    .blink {
+      animation: blinker 1s linear infinite;
+    }
+    @keyframes blinker {
+      50% { opacity: 0; }
+    }
+  </style>
 </head>
 <body>
-  <div id="app">
-    <div class="start" v-if="clicks === 0">
-      <button @click.prevent.stop="startCounter">시작</button>
-    </div>
-    <div class="chat" v-else>
-      <h2 class="question">{{ questions[question] }}</h2>
-      <p class="time">{{ seconds }}</p>
+  <div id="app" v-cloak>
+    <div class="contents-wrap">
+      <div class="contents">
+        <div class="start" v-if="clicks === 0">
+          <button @click.prevent.stop="startCounter">시작</button>
+        </div>
+        <div class="chat" v-else>
+          <h2 class="question" :class="{ blink: seconds <= 10 }">{{ questions[question] }}</h2>
+          <!-- <p class="time">{{ seconds }}</p> -->
+        </div>
+      </div>
     </div>
   </div>
   <script src="https://unpkg.com/vue"></script>
@@ -32,13 +199,12 @@
           'Vue.js로 만들어 보고 싶은 프로젝트',
           'Vuetiful Korea 세번째 밋업에서 가장 인상깊었던 세션',
           'Vuetiful Korea 밋업을 개선하는 방법',
-          '자기소개',
+          '자기 소개',
           '모두 오른쪽에 있는 사람 안마해주기',
           '왼쪽에 앉은 사람 웃기기',
-          '건너편에 앉은 사람과 자리 바꾸기',
           'Vuetiful Korea 스태프 및 발표자에게 감사인사',
-          '소속단체소개',
-          '아무말대잔치'
+          '소속단체 소개',
+          '아무 말 대잔치'
         ]
       },
       computed: {
@@ -50,7 +216,6 @@
             return
           } else {
             vm.question = Math.floor(Math.random() * vm.questions.length)
-            console.log(vm.question)
             vm.seconds = Math.floor((Math.random() * 49) + 12)
             vm.counter = setInterval(intervalFn, 1000)
           }
