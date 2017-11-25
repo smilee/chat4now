@@ -225,6 +225,8 @@
       methods: {
         startCounter () {
           let vm = this
+          music.play()
+          music.pause()
           if (vm.clicks > 0) {
             return
           } else {
